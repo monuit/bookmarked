@@ -1,0 +1,80 @@
+# Node modules
+node_modules/
+
+# Build output
+build/
+dist/
+
+# Expo/React Native
+.expo/
+.expo-shared/
+*.expo/
+*.expo-shared/
+*.log
+*.lock
+*.tmp
+*.swp
+
+# Metro bundler cache
+apps/mobile/caches/
+
+# iOS
+apps/mobile/ios/build/
+apps/mobile/ios/Pods/
+apps/mobile/ios/Podfile.lock
+apps/mobile/ios/*.xcworkspace
+apps/mobile/ios/*.xcodeproj
+apps/mobile/ios/*.xcuserstate
+apps/mobile/ios/*.xcuserdata
+apps/mobile/ios/*.pbxuser
+apps/mobile/ios/*.mode1v3
+apps/mobile/ios/*.mode2v3
+apps/mobile/ios/*.perspectivev3
+apps/mobile/ios/DerivedData/
+
+# Android
+apps/mobile/android/.gradle/
+apps/mobile/android/app/build/
+apps/mobile/android/local.properties
+apps/mobile/android/.idea/
+
+# Web/React
+apps/web/node_modules/
+apps/web/build/
+apps/web/dist/
+apps/web/.next/
+apps/web/.cache/
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Test/coverage
+coverage/
+*.lcov
+
+# Misc
+.env*
+*.env*
+
+# Yarn
+.yarn/
+.pnp.*
+
+# Others
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore lock files if using only one package manager
+# package-lock.json
+yarn.lock
+
+# Ignore patch folders
+apps/mobile/patches/
+
+# Ignore public build artifacts
+apps/mobile/public/
+apps/web/public/
