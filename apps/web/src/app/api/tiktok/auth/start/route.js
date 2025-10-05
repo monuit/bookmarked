@@ -23,8 +23,15 @@ export async function GET(c) {
     return Response.json({ error: 'TikTok redirect URI not configured for environment' }, { status: 500 });
   }
 
-  // Basic state protection
-  const state = crypto.randomUUID();
+  // State: include a nonce and optional native app redirect for closing web browser
+  const urlObj = new URL(c.url);
+  const appRedirect = urlObj.searchParams.get('appRedirect');
+  const statePayload = {
+    n: crypto.randomUUID(),
+    t: Date.now(),
+    ar: appRedirect || null,
+  };
+  const state = Buffer.from(JSON.stringify(statePayload)).toString('base64url');
 
   const scopes = [
     // TikTok public scopes; note: there is no official "bookmarks" scope

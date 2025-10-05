@@ -15,17 +15,8 @@ export async function POST(request) {
   // If you have predefined price IDs, pass them from client. For now, we can create a Price on the fly for testing.
   const { priceId, mode = 'subscription', successUrl, cancelUrl } = body;
 
-  let price = priceId;
-  if (!price) {
-    // Create a product/price for testing. In production, set this up in dashboard and send priceId.
-    const product = await stripe.products.create({ name: 'Bookmarked Pro (Auto-renew)' });
-    const created = await stripe.prices.create({
-      unit_amount: 499,
-      currency: 'usd',
-      recurring: { interval: 'month' },
-      product: product.id,
-    });
-    price = created.id;
+  if (!priceId) {
+    return Response.json({ error: 'priceId is required' }, { status: 400 });
   }
 
   const checkout = await stripe.checkout.sessions.create({
@@ -33,7 +24,7 @@ export async function POST(request) {
     customer_email: session.user.email,
     line_items: [
       {
-        price,
+        price: priceId,
         quantity: 1,
       },
     ],

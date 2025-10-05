@@ -40,7 +40,7 @@ export default function SubscriptionScreen() {
       const res = await fetch('/api/billing/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'subscription' }),
+        body: JSON.stringify({ mode: 'subscription', priceId: process.env.EXPO_PUBLIC_STRIPE_PRICE_ID }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to init checkout');
