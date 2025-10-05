@@ -9,8 +9,12 @@ const getURLFromArgs = (...args: Parameters<typeof fetch>) => {
   let url: string | null;
   if (typeof urlArg === 'string') {
     url = urlArg;
-  } else if (typeof urlArg === 'object' && urlArg !== null) {
+  } else if (typeof Request !== 'undefined' && urlArg instanceof Request) {
     url = urlArg.url;
+  } else if (typeof URL !== 'undefined' && urlArg instanceof URL) {
+    url = urlArg.toString();
+  } else if (typeof urlArg === 'object' && urlArg && 'url' in (urlArg as any)) {
+    url = (urlArg as any).url ?? null;
   } else {
     url = null;
   }
@@ -36,7 +40,7 @@ const fetchToWeb = async function fetchWithHeaders(...args: Params) {
     return expoFetch(...args);
   }
   const [input, init] = args;
-  const url = getURLFromArgs(input, init);
+  const url = getURLFromArgs(input as any, init as any);
   if (!url) {
     return expoFetch(input, init);
   }

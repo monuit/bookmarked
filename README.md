@@ -40,6 +40,25 @@ This repository contains both a mobile iOS app (built with React Native/Expo) an
 - Install dependencies: `cd apps/web && npm install`
 - Start development: `npm run dev`
 
+### Environment configuration (apps/web)
+
+1) Copy `.env.example` to `.env` in `apps/web/` and fill in keys as they become available.
+
+Required keys:
+- `DATABASE_URL` (Neon Postgres)
+- `AUTH_SECRET` (for @auth/core)
+- `STRIPE_SECRET_KEY` (server API key)
+- `TIKTOK_CLIENT_KEY` / `TIKTOK_CLIENT_SECRET`
+- `ENV` (development | staging | production)
+- `PUBLIC_BASE_URL` (used for Stripe redirect URLs)
+
+Optional per-environment TikTok redirect URIs:
+- `TIKTOK_REDIRECT_URI_DEV`
+- `TIKTOK_REDIRECT_URI_STAGING`
+- `TIKTOK_REDIRECT_URI_PROD`
+
+Restart the dev server after changing env vars.
+
 
 ## Scripts
 

@@ -430,8 +430,7 @@ export const AlertModal = () => {
 };
 
 const styling = (userInterfaceStyle: string) =>
-	// @ts-expect-error - outlineStyle is for web only
-	StyleSheet.create({
+	StyleSheet.create<any>({
 		container: {
 			flex: 1,
 			justifyContent: 'center',

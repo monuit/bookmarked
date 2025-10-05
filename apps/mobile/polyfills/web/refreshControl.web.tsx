@@ -1,3 +1,5 @@
-import { RefreshControl } from 'react-native-web-refresh-control';
+// Minimal type shim to appease TS when the library lacks types
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { RefreshControl } = require('react-native-web-refresh-control');
 
-export default RefreshControl;
+export default RefreshControl as import('react-native').RefreshControl;
