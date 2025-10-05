@@ -53,6 +53,10 @@ export async function GET(request) {
       [session.user.id, String(user_id), longToken]
     );
 
+    const close = process.env.MOBILE_OAUTH_CLOSE_URL;
+    if (close) {
+      return Response.redirect(close, 302);
+    }
     return Response.json({ success: true });
   } catch (e) {
     console.error('Instagram callback error', e);

@@ -30,7 +30,7 @@ export default function ProfileScreen() {
     try {
       const base = process.env.EXPO_PUBLIC_BASE_URL;
       if (!base) throw new Error('Base URL not configured');
-      const res = await fetch(`${base}/api/instagram/auth/start`);
+      const res = await fetch(`${base}/api/instagram/auth/start?appRedirect=bookmarked://oauth-close`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to init Instagram auth');
       const url = data.authorizeUrl;
@@ -44,6 +44,19 @@ export default function ProfileScreen() {
 
   const manageSubscription = async () => {
     Alert.alert('Manage Subscription', 'Use the Subscription tab to subscribe or manage your plan.');
+  };
+
+  const openTutorial = async () => {
+    try {
+      const base = process.env.EXPO_PUBLIC_BASE_URL;
+      if (!base) throw new Error('Base URL not configured');
+      const url = `${base}/tutorial`;
+      const supported = await Linking.canOpenURL(url);
+      if (supported) await Linking.openURL(url);
+      else Alert.alert('Open Tutorial', url);
+    } catch (e) {
+      Alert.alert('Error', e.message || 'Failed to open tutorial');
+    }
   };
 
   return (
@@ -64,6 +77,9 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           <TouchableOpacity onPress={manageSubscription} style={{ backgroundColor: colors.cardBackground, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: colors.border }}>
             <Text style={{ color: colors.text, textAlign: 'center', fontFamily: 'Inter_600SemiBold' }}>Manage Subscription</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={openTutorial} style={{ backgroundColor: colors.cardBackground, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ color: colors.text, textAlign: 'center', fontFamily: 'Inter_600SemiBold' }}>Open Tutorial</Text>
           </TouchableOpacity>
         </View>
       </View>

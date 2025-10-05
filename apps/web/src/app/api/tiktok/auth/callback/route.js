@@ -93,6 +93,11 @@ export async function GET(request) {
       [userId, open_id, access_token, refresh_token, scope, expiresAt, refreshExpiresAt]
     );
 
+    // Optional deep link close
+    const close = process.env.MOBILE_OAUTH_CLOSE_URL;
+    if (close) {
+      return Response.redirect(close, 302);
+    }
     return Response.json({ success: true });
   } catch (e) {
     console.error('TikTok callback error:', e);

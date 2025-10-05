@@ -51,3 +51,15 @@ export async function end() {
   } catch {}
   connected = false;
 }
+
+export async function getReceipt() {
+  try {
+    const hist = await RNIap.getPurchaseHistory();
+    const latest = Array.isArray(hist) ? hist[0] : null;
+    if (!latest) return null;
+    // iOS: transactionReceipt contains base64 receipt
+    return latest.transactionReceipt || null;
+  } catch {
+    return null;
+  }
+}

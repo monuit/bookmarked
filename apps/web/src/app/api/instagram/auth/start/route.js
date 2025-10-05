@@ -9,7 +9,8 @@ export async function GET(c) {
   if (!clientId || !redirectUri) return Response.json({ error: 'Instagram env missing' }, { status: 500 });
 
   // Instagram Basic Display API OAuth (long-lived token flow)
-  const state = Buffer.from(JSON.stringify({ n: crypto.randomUUID(), t: Date.now() })).toString('base64url');
+  const appRedirect = new URL(c.url).searchParams.get('appRedirect') || null;
+  const state = Buffer.from(JSON.stringify({ n: crypto.randomUUID(), t: Date.now(), ar: appRedirect })).toString('base64url');
   const url = new URL('https://api.instagram.com/oauth/authorize');
   url.searchParams.set('client_id', clientId);
   url.searchParams.set('redirect_uri', redirectUri);

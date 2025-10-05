@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTheme } from '@/utils/theme';
-import { initIAP, fetchProducts, buy, restore } from '@/billing/iap';
+import { initIAP, fetchProducts, buy, restore, getReceipt } from '@/billing/iap';
 import { useEffect, useState } from 'react';
 
 export default function SubscriptionScreen() {
@@ -29,6 +29,15 @@ export default function SubscriptionScreen() {
     }
     try {
       await buy(productId);
+      // Grab the latest receipt and send to server for entitlement
+      const receiptData = await getReceipt();
+      if (receiptData) {
+        await fetch('/api/billing/ios/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ receiptData }),
+        });
+      }
       Alert.alert('Success', 'Thanks for subscribing!');
     } catch (e) {
       Alert.alert('Purchase failed', e.message || 'Try again later');
