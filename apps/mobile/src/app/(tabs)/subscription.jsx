@@ -2,13 +2,37 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTheme } from '@/utils/theme';
+import { initIAP, fetchProducts, buy, restore } from '@/billing/iap';
+import { useEffect, useState } from 'react';
 
 export default function SubscriptionScreen() {
   const insets = useSafeAreaInsets();
   const { colors, isDark } = useTheme();
+  const [productId, setProductId] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const ok = await initIAP();
+      if (!ok) return;
+      const prods = await fetchProducts();
+      if (prods && prods.length) setProductId(prods[0].productId || prods[0].sku);
+    })();
+    return () => {
+      // connection cleaned up by app unmount typically
+    };
+  }, []);
 
   const buyOnIOS = async () => {
-    Alert.alert('Coming soon', 'In-app purchases will be enabled once product IDs are configured.');
+    if (!productId) {
+      Alert.alert('Not ready', 'Add product IDs in .env and restart to enable Apple purchase.');
+      return;
+    }
+    try {
+      await buy(productId);
+      Alert.alert('Success', 'Thanks for subscribing!');
+    } catch (e) {
+      Alert.alert('Purchase failed', e.message || 'Try again later');
+    }
   };
 
   const buyOnWeb = async () => {

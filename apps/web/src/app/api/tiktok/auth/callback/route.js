@@ -1,7 +1,12 @@
 import sql from '@/app/api/utils/sql';
+import { auth } from '@/auth';
 
 export async function GET(request) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const clientKey = process.env.TIKTOK_CLIENT_KEY;
     const clientSecret = process.env.TIKTOK_CLIENT_SECRET;
     if (!clientKey || !clientSecret) {
@@ -69,9 +74,7 @@ export async function GET(request) {
       )
     `);
 
-    // For simplicity, we assume some upstream middleware sets req.user.id via session -> In this repo, api routes call auth directly where needed.
-    // To keep this callback generic, accept user_id as a query param for dev. In production, we should read from session.
-    const userId = url.searchParams.get('user_id') || 'dev-user';
+    const userId = session.user.id;
 
     const expiresAt = new Date(Date.now() + (expires_in ?? 0) * 1000);
     const refreshExpiresAt = new Date(Date.now() + (refresh_expires_in ?? 0) * 1000);
